@@ -9,7 +9,4 @@ public interface Frame {
 	public void draw(float dt);
 	public void update();
 	public void deinit();
-	
-	public Launcher getLauncher();
-	public void setLauncher(Launcher cfg);
 }
