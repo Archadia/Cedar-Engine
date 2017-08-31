@@ -1,28 +1,24 @@
-package uk.ashigaru.engine.render.model.higher;
+package uk.ashigaru.engine.render.model.higher.mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ModelGroup {
+import uk.ashigaru.engine.render.model.higher.Material;
+
+public class Mesh {
 
 	private Map<String, List<Float>> map = new HashMap<String, List<Float>>();
 	
 	private Material material;
-	
-	public ModelGroup(float[] vertices, float[] normals, float[] textureCoords) {
-		this.push("vertices", vertices);
-		this.push("normals", normals);
-		this.push("textureCoords", textureCoords);
-	}
 
 	public void clear() {
 		map.clear();
 		material = null;
 	}
 	
-	public ModelGroup setMaterial(Material material) {
+	public Mesh setMaterial(Material material) {
 		this.material = material;
 		return this;
 	}
@@ -31,7 +27,7 @@ public class ModelGroup {
 		return material;
 	}
 
-	public void push(String name, float... array) {
+	public Mesh push(String name, float... array) {
 		if (!map.containsKey(name)) {
 			List<Float> list = new ArrayList<Float>();
 			for(float f : array) list.add(f);
@@ -39,6 +35,7 @@ public class ModelGroup {
 		} else {
 			for(float f : array) map.get(name).add(f);
 		}
+		return this;
 	}
 	
 	public float[] getArray(String name) {

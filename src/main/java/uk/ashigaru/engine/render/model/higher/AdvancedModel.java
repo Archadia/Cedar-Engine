@@ -8,23 +8,24 @@ import java.util.Map;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import uk.ashigaru.engine.render.model.higher.mesh.Mesh;
 import uk.ashigaru.engine.render.model.lower.RawModel;
 import uk.ashigaru.engine.render.model.lower.VAO;
 import uk.ashigaru.engine.util.Resource;
 
 public class AdvancedModel {
 	
-	private List<ModelGroup> modelGroups = new ArrayList<ModelGroup>();
+	private List<Mesh> modelGroups = new ArrayList<Mesh>();
 	
-	public AdvancedModel(List<ModelGroup> modelParts) {
+	public AdvancedModel(List<Mesh> modelParts) {
 		this.modelGroups = modelParts;
 	}
 	
-	public List<ModelGroup> getModelGroups() {
+	public List<Mesh> getModelGroups() {
 		return modelGroups;
 	}
 
-	public AdvancedModel setModelGroups(List<ModelGroup> modelParts) {
+	public AdvancedModel setModelGroups(List<Mesh> modelParts) {
 		this.modelGroups = modelParts;
 		return this;
 	}
@@ -32,7 +33,7 @@ public class AdvancedModel {
 	public static AdvancedModel load(Resource model, Resource materials) {
 		String modelSrc = model.source();
 		String[] lines = modelSrc.split("\n");
-		List<ModelGroup> modelPartList = new ArrayList<ModelGroup>();
+		List<Mesh> modelPartList = new ArrayList<Mesh>();
 		List<Vector3f> vertices = new ArrayList<Vector3f>();
 		List<Vector3f> normals = new ArrayList<Vector3f>();
 		List<Vector2f> texes = new ArrayList<Vector2f>();
@@ -105,7 +106,7 @@ public class AdvancedModel {
 				textureArray[(i * 6) + 4] = texes.get((int) face.texCoordIndex.z).x;
 				textureArray[(i * 6) + 5] = 1 - texes.get((int) face.texCoordIndex.z).y;
 			}
-			modelPartList.add(new ModelGroup(verticesArray, normalsArray, textureArray).setMaterial(mat));
+			modelPartList.add(new Mesh().push("vertices", verticesArray).push("normals", normalsArray).push("textureCoords", textureArray).setMaterial(mat));
 		}
 		return new AdvancedModel(modelPartList);
 	}
@@ -113,7 +114,7 @@ public class AdvancedModel {
 	
 	public RawModel convertToRaw(RunnableModelConvert func) {
 		RawModel model = new RawModel();
-		for(ModelGroup mg : getModelGroups()) {
+		for(Mesh mg : getModelGroups()) {
 			VAO vao = new VAO();
 			vao.bind();
 			func.run(mg, vao);
@@ -125,6 +126,6 @@ public class AdvancedModel {
 	
 	@FunctionalInterface
 	public static interface RunnableModelConvert {
-		public void run(ModelGroup modelGroup, VAO vao);
+		public void run(Mesh modelGroup, VAO vao);
 	}
 }
