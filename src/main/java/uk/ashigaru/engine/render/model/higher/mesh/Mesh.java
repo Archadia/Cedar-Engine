@@ -12,7 +12,7 @@ public class Mesh {
 	private Map<String, List<Float>> map = new HashMap<String, List<Float>>();
 	
 	private Material material;
-
+	
 	public void clear() {
 		map.clear();
 		material = null;
@@ -39,6 +39,7 @@ public class Mesh {
 	}
 	
 	public float[] getArray(String name) {
+		if(!map.containsKey(name)) return new float[0];
 		List<Float> list = map.get(name);
 		float[] array = new float[list.size()];
 		for(int i = 0; i < array.length; i++) array[i] = list.get(i);

@@ -5,12 +5,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.joml.Vector3f;
+import org.joml.Vector3i;
+
 import uk.ashigaru.engine.render.model.higher.Material;
 
 public class MeshIndexed {
 
-	private Map<String, List<Float>> map = new HashMap<String, List<Float>>();
-	private Map<String, List<Integer>> triangleMap = new HashMap<String, List<Integer>>();
+	private Map<String, List<Vector3f>> map = new HashMap<String, List<Vector3f>>();
+	private Map<String, List<Vector3i>> triangleMap = new HashMap<String, List<Vector3i>>();
  	
 	private Material material;
 	
@@ -30,47 +33,33 @@ public class MeshIndexed {
 		return material;
 	}
 	
-	public MeshIndexed pushTriangle(String name, int... array) {
+	public MeshIndexed pushTriangle(String name, Vector3i... array) {
 		if (!triangleMap.containsKey(name)) {
-			List<Integer> list = new ArrayList<Integer>();
-			for(int i : array) list.add(i);
+			List<Vector3i> list = new ArrayList<Vector3i>();
+			for(Vector3i i : array) list.add(i);
 			triangleMap.put(name, list);
 		} else {
-			for(int i : array) triangleMap.get(name).add(i);
+			for(Vector3i i : array) triangleMap.get(name).add(i);
 		}
 		return this;
 	}
 	
-	public MeshIndexed push(String name, float... array) {
+	public MeshIndexed push(String name, Vector3f... array) {
 		if (!map.containsKey(name)) {
-			List<Float> list = new ArrayList<Float>();
-			for(float f : array) list.add(f);
+			List<Vector3f> list = new ArrayList<Vector3f>();
+			for(Vector3f v : array) list.add(v);
 			map.put(name, list);
 		} else {
-			for(float f : array) map.get(name).add(f);
+			for(Vector3f v : array) map.get(name).add(v);
 		}
 		return this;
 	}
 	
-	public float[] getArray(String name) {
-		List<Float> list = map.get(name);
-		float[] array = new float[list.size()];
-		for(int i = 0; i < array.length; i++) array[i] = list.get(i);
-		return array;
-	}
-	
-	public int[] getTriangleArray(String name) {
-		List<Integer> list = triangleMap.get(name);
-		int[] array = new int[list.size()];
-		for(int i = 0; i < array.length; i++) array[i] = list.get(i);
-		return array;
-	}
-	
-	public List<Float> get(String name) {
+	public List<Vector3f> get(String name) {
 		return map.get(name);
 	}
 	
-	public List<Integer> getTriangle(String name) {
+	public List<Vector3i> getTriangles(String name) {
 		return triangleMap.get(name);
 	}
 }
