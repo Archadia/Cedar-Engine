@@ -13,9 +13,13 @@ public class Input {
 	public static EventSubject eventMouseMove = new EventSubject();
 	
 	public static EventSubject eventKeyUsed = new EventSubject();
-
+	
 	public static void setCursorState(int cursor) {
 		GLFW.glfwSetInputMode(Launcher.display.windowID, GLFW.GLFW_CURSOR, cursor);
+	}
+	
+	public static int getCursorState() {
+		return GLFW.glfwGetInputMode(Launcher.display.windowID, GLFW.GLFW_CURSOR);
 	}
 	
 	public static boolean isKeyDown(int key) {

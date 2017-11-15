@@ -7,10 +7,8 @@ import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
-import org.joml.Vector2f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL15;
 
 import uk.ashigaru.engine.util.Resource;
 
@@ -18,31 +16,11 @@ public class Texture {
 
 	private int width, height;
 	private int textureID;
-		
-	private int iconSize = 1;
-	
+			
 	public Texture() {}
 	
 	public Texture(Resource texture) {
 		this.load(texture);
-	}
-	
-	public Texture(Resource texture, int iconSize) {
-		this.load(texture);
-		this.setIconSize(iconSize);
-	}
-
-	public Vector2f getTextureOffset(int index) {
-		if(iconSize == 0) return new Vector2f(0,0);
-		return new Vector2f(index % iconSize, (int) index / iconSize);
-	}
-	
-	public int getIconSize() {
-		return iconSize;
-	}
-
-	public void setIconSize(int iconSize) {
-		this.iconSize = iconSize;
 	}
 
 	public void bind() {

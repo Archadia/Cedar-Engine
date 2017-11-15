@@ -17,6 +17,8 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
+import uk.ashigaru.engine.Launcher;
+
 public class Display {
 	
 	private GLFWKeyCallback glfwKeyCallback;
@@ -68,6 +70,7 @@ public class Display {
 			public void invoke(long window, int width, int height) {
 				if(window != windowID) return;
 				GL11.glViewport(0, 0, width, height);
+				Launcher.eventDisplayResize.execute(width, height);
 			}
 		});
 		glfwSetMouseButtonCallback(windowID, glfwMouseButtonCallback = new GLFWMouseButtonCallback() {
@@ -88,7 +91,6 @@ public class Display {
 				Input.eventMouseMove.execute(xpos, ypos);
 			}
 		});
-		
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowMonitor(windowID, fullscreen ? glfwGetPrimaryMonitor() : NULL, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2, width, height, vidmode.refreshRate());
 		

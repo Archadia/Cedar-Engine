@@ -2,6 +2,7 @@ package uk.ashigaru.engine;
 
 import uk.ashigaru.engine.glfw.Display;
 import uk.ashigaru.engine.glfw.Input;
+import uk.ashigaru.engine.observer.EventSubject;
 
 public class Launcher {
 
@@ -15,6 +16,8 @@ public class Launcher {
 	private static long loops;
 	private static float interpolation;
 	
+	public static EventSubject eventDisplayResize = new EventSubject();
+
 	public static void start(Frame frame, int width, int height, String title, boolean vsync, boolean fullscreen) {
 		display = new Display();
 		frame.setupWindow(display);
