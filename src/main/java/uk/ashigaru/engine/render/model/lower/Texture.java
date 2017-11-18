@@ -20,7 +20,11 @@ public class Texture {
 	public Texture() {}
 	
 	public Texture(Resource texture) {
-		this.load(texture);
+		this.textureID = this.createTexture(this.scanResource(texture), this.width, this.height);
+	}
+	
+	public Texture(RawTexture texture) {
+		this.textureID = this.createTexture(texture.getPixels(), texture.getWidth(), texture.getHeight());
 	}
 
 	public void bind() {
@@ -31,7 +35,7 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 	
-	private void load(Resource texture) {
+	private int[] scanResource(Resource texture) {
 		int[] pixels = null;
 		try {
 			BufferedImage image = ImageIO.read(new FileInputStream(texture.getPath()));
@@ -51,8 +55,11 @@ public class Texture {
 			int b = (pixels[i] & 0xff);
 			
 			data[i] = a << 24 | b << 16 | g << 8 | r;
-		}
-		
+		}		
+		return data;
+	}
+	
+	private int createTexture(int[] data, int width, int height) {
 		int result = GL11.glGenTextures();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, result);	
@@ -64,7 +71,7 @@ public class Texture {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-		this.textureID = result;
+		return result;
 	}
 	
 	public void delete() {

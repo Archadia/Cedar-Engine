@@ -17,7 +17,6 @@ public class ArtificialTexture {
 		this.height = height;
 	}
 	
-	
 	public void createBlankTexture() {
 		int[] data = new int[width * height];
 		int result = GL11.glGenTextures();
@@ -35,7 +34,7 @@ public class ArtificialTexture {
 	}
 	
 	public void stitchTexture(int x, int y, RawTexture texture) {
-		if(texture.getWidth() > this.width) {
+		if(texture.getWidth() > this.width || texture.getHeight() > this.height) {
 			Logger.err("Cannot stitch texture. Exceeding bounds!");
 			return;
 		}

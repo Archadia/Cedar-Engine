@@ -16,9 +16,9 @@ public class RawTexture {
 	public RawTexture() {}
 	
 	public RawTexture(Resource texture) {
-		this.load(texture);
+		this.data = scanResource(texture);
 	}
-	private void load(Resource texture) {
+	private int[] scanResource(Resource texture) {
 		int[] pixels = null;
 		try {
 			BufferedImage image = ImageIO.read(new FileInputStream(texture.getPath()));
@@ -30,7 +30,7 @@ public class RawTexture {
 			e.printStackTrace();
 		}
 		
-		data = new int[width * height];
+		int[] data = new int[width * height];
 		for(int i = 0; i < width * height; i++) {
 			int a = (pixels[i] & 0xff000000) >> 24;
 			int r = (pixels[i] & 0xff0000) >> 16;
@@ -39,6 +39,7 @@ public class RawTexture {
 			
 			data[i] = a << 24 | b << 16 | g << 8 | r;
 		}
+		return data;
 	}
 		
 	public int getWidth() { return width; }
