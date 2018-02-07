@@ -32,5 +32,5 @@ public abstract class Batcher<Batchee, Handler> {
 		return batch.containsKey(i);
 	}
 	
-	public abstract void compute(Handler handler);
+	public abstract void render(Handler handler);
 }

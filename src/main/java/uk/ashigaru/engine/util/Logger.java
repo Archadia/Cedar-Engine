@@ -18,7 +18,7 @@ public class Logger {
 	}
 	
 	public static void log(String string) {
-		String outString = "[" + timeStamp() + "][OUT] " + string;
+		String outString = "[" + timeStamp() + "][OUT][" + Thread.currentThread().getName() + "] " + string;
 		collectedLogs.add(outString);
 		System.out.println(outString);
 	}

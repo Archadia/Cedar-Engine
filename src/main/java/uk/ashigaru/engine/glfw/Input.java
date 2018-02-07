@@ -1,10 +1,16 @@
 package uk.ashigaru.engine.glfw;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
 import uk.ashigaru.engine.Launcher;
 import uk.ashigaru.engine.observer.EventSubject;
+import uk.ashigaru.engine.util.Logger;
 
 public class Input {
 
@@ -59,5 +65,40 @@ public class Input {
 	public static int getMouseY() {
 		return (int) getMousePos().y;
 	}
+	
+	private static Map<Integer, List<Runnable>> keyPressObservers = new HashMap<Integer, List<Runnable>>();
+	private static List<Runnable> leftClickObservers = new ArrayList<Runnable>();
+	
+	static {
+		eventKeyUsed.attach((obj) -> {
+			if ((int) obj[2] == GLFW.GLFW_RELEASE) {
+				if(keyPressObservers.containsKey(obj[0])) {
+					for(Runnable runnable : keyPressObservers.get(obj[0])) {
+						runnable.run();
+					}
+				}
+			}
+		});
+		eventMouseClick.attach((obj) -> {
+			if((int) obj[0] == GLFW.GLFW_MOUSE_BUTTON_1 && (int) obj[1] == GLFW.GLFW_RELEASE) {
+				for(Runnable runnable : leftClickObservers) {
+					runnable.run();
+				}
+			}
+		});
+	}
+	
+	public static void onLeftClick(Runnable runnable) {
+		leftClickObservers.add(runnable);
+	}
 
+	public static void onKeyRelease(int key, Runnable runnable) {
+		if(keyPressObservers.containsKey(key)) {
+			keyPressObservers.get(key).add(runnable);
+		} else {
+			List<Runnable> list = new ArrayList<Runnable>();
+			list.add(runnable);
+			keyPressObservers.put(key, list);
+		}
+	}
 }
