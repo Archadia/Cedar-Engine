@@ -4,7 +4,7 @@ import uk.ashigaru.engine.glfw.Display;
 import uk.ashigaru.engine.glfw.Input;
 import uk.ashigaru.engine.observer.EventSubject;
 
-public class Launcher {
+public class Engine {
 
 	public static Display display;
 	

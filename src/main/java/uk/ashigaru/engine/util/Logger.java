@@ -26,7 +26,7 @@ public class Logger {
 	public static void err(String string) {
 		String outString = "[" + timeStamp() + "][ERR] " + string;
 		collectedLogs.add(outString);
-		System.out.println(outString);
+		System.err.println(outString);
 	}
 	
 	public static void dbg(String string) {

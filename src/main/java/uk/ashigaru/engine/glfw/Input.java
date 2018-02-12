@@ -8,7 +8,7 @@ import java.util.Map;
 import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 
-import uk.ashigaru.engine.Launcher;
+import uk.ashigaru.engine.Engine;
 import uk.ashigaru.engine.observer.EventSubject;
 import uk.ashigaru.engine.util.Logger;
 
@@ -21,15 +21,15 @@ public class Input {
 	public static EventSubject eventKeyUsed = new EventSubject();
 	
 	public static void setCursorState(int cursor) {
-		GLFW.glfwSetInputMode(Launcher.display.windowID, GLFW.GLFW_CURSOR, cursor);
+		GLFW.glfwSetInputMode(Engine.display.windowID, GLFW.GLFW_CURSOR, cursor);
 	}
 	
 	public static int getCursorState() {
-		return GLFW.glfwGetInputMode(Launcher.display.windowID, GLFW.GLFW_CURSOR);
+		return GLFW.glfwGetInputMode(Engine.display.windowID, GLFW.GLFW_CURSOR);
 	}
 	
 	public static boolean isKeyDown(int key) {
-		return GLFW.glfwGetKey(Launcher.display.windowID, key) == GLFW.GLFW_PRESS;
+		return GLFW.glfwGetKey(Engine.display.windowID, key) == GLFW.GLFW_PRESS;
 	}
 	
 	private static int currMouseX, currMouseY;
@@ -54,7 +54,7 @@ public class Input {
 	public static Vector2f getMousePos() {
 		double[] xArray = new double[1];
 		double[] yArray = new double[1];
-		GLFW.glfwGetCursorPos(Launcher.display.windowID, xArray, yArray);
+		GLFW.glfwGetCursorPos(Engine.display.windowID, xArray, yArray);
 		return new Vector2f((float) xArray[0], (float) yArray[0]);
 	}
 	

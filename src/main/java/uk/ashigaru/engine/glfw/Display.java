@@ -17,7 +17,7 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-import uk.ashigaru.engine.Launcher;
+import uk.ashigaru.engine.Engine;
 
 public class Display {
 	
@@ -70,7 +70,7 @@ public class Display {
 			public void invoke(long window, int width, int height) {
 				if(window != windowID) return;
 				GL11.glViewport(0, 0, width, height);
-				Launcher.eventDisplayResize.execute(width, height);
+				Engine.eventDisplayResize.execute(width, height);
 			}
 		});
 		glfwSetMouseButtonCallback(windowID, glfwMouseButtonCallback = new GLFWMouseButtonCallback() {

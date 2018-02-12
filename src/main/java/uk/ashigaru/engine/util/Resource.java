@@ -91,7 +91,7 @@ public class Resource {
 			}
 			reader.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			Logger.err("Missing file, cannot load: " + this.getPath());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
