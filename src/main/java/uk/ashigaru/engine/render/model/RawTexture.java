@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.render.model.lower;
+             package uk.ashigaru.engine.render.model;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;

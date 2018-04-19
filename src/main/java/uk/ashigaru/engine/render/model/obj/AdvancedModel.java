@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.render.model.higher;
+package uk.ashigaru.engine.render.model.obj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,9 +8,9 @@ import java.util.Map;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import uk.ashigaru.engine.render.model.higher.mesh.Mesh;
-import uk.ashigaru.engine.render.model.lower.RawModel;
-import uk.ashigaru.engine.render.model.lower.VAO;
+import uk.ashigaru.engine.render.model.RawModel;
+import uk.ashigaru.engine.render.model.VAO;
+import uk.ashigaru.engine.render.model.obj.mesh.Mesh;
 import uk.ashigaru.engine.util.Resource;
 
 public class AdvancedModel {

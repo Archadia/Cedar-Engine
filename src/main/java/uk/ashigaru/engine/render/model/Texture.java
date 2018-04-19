@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.render.model.lower;
+package uk.ashigaru.engine.render.model;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
@@ -9,6 +9,8 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.opengl.GL42;
 
 import uk.ashigaru.engine.util.Resource;
 
@@ -31,7 +33,7 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 	}
 	
-	public void unbind() {
+	public static void unbind() {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 	
@@ -60,16 +62,17 @@ public class Texture {
 	}
 	
 	private int createTexture(int[] data, int width, int height) {
-		int result = GL11.glGenTextures();
+		int result = GL11.glGenTextures(); 
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, result);	
 		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
 		buffer.put(data).flip();
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);		
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+		GL42.glTexStorage2D(GL11.GL_TEXTURE_2D, 1, GL11.GL_RGBA8, width, height);
+		GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, 0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);	
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		return result;
 	}

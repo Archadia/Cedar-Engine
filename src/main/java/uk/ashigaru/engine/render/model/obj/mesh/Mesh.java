@@ -1,11 +1,13 @@
-package uk.ashigaru.engine.render.model.higher.mesh;
+package uk.ashigaru.engine.render.model.obj.mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import uk.ashigaru.engine.render.model.higher.Material;
+import com.google.common.collect.Lists;
+
+import uk.ashigaru.engine.render.model.obj.Material;
 
 public class Mesh {
 
@@ -16,6 +18,14 @@ public class Mesh {
 	public void clear() {
 		map.clear();
 		material = null;
+	}
+	
+	public void reverse() {
+		for(String key : map.keySet()) {
+			List<Float> list = map.get(key);
+			List<Float> reversed = Lists.reverse(list);
+			map.put(key, reversed);
+		}
 	}
 	
 	public Mesh setMaterial(Material material) {

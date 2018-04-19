@@ -1,9 +1,9 @@
-package uk.ashigaru.engine.render.model.lower;
+package uk.ashigaru.engine.render.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ashigaru.engine.render.model.higher.Material;
+import uk.ashigaru.engine.render.model.obj.Material;
 
 public class RawModel {
 

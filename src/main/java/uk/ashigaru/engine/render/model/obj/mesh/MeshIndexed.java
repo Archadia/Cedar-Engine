@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.render.model.higher.mesh;
+package uk.ashigaru.engine.render.model.obj.mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-import uk.ashigaru.engine.render.model.higher.Material;
+import uk.ashigaru.engine.render.model.obj.Material;
 
 public class MeshIndexed {
 

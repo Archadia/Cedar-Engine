@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.render.model.higher;
+package uk.ashigaru.engine.render.model.obj;
 
 import org.joml.Vector3f;
 

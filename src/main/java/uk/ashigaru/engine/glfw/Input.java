@@ -10,7 +10,6 @@ import org.lwjgl.glfw.GLFW;
 
 import uk.ashigaru.engine.Engine;
 import uk.ashigaru.engine.observer.EventSubject;
-import uk.ashigaru.engine.util.Logger;
 
 public class Input {
 
@@ -68,7 +67,8 @@ public class Input {
 	
 	private static Map<Integer, List<Runnable>> keyPressObservers = new HashMap<Integer, List<Runnable>>();
 	private static List<Runnable> leftClickObservers = new ArrayList<Runnable>();
-	
+	private static List<Runnable> rightClickObservers = new ArrayList<Runnable>();
+
 	static {
 		eventKeyUsed.attach((obj) -> {
 			if ((int) obj[2] == GLFW.GLFW_RELEASE) {
@@ -80,16 +80,26 @@ public class Input {
 			}
 		});
 		eventMouseClick.attach((obj) -> {
-			if((int) obj[0] == GLFW.GLFW_MOUSE_BUTTON_1 && (int) obj[1] == GLFW.GLFW_RELEASE) {
-				for(Runnable runnable : leftClickObservers) {
-					runnable.run();
+			if((int) obj[1] == GLFW.GLFW_RELEASE) {
+				if((int) obj[0] == GLFW.GLFW_MOUSE_BUTTON_1) {
+					for(Runnable runnable : leftClickObservers) {
+						runnable.run();
+					}
+				} else if((int) obj[0] == GLFW.GLFW_MOUSE_BUTTON_2) {
+					for(Runnable runnable : rightClickObservers) {
+						runnable.run();
+					}
 				}
-			}
+			} 
 		});
 	}
 	
 	public static void onLeftClick(Runnable runnable) {
 		leftClickObservers.add(runnable);
+	}
+	
+	public static void onRightClick(Runnable runnable) {
+		rightClickObservers.add(runnable);
 	}
 
 	public static void onKeyRelease(int key, Runnable runnable) {

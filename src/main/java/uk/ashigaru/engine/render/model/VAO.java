@@ -1,6 +1,7 @@
-package uk.ashigaru.engine.render.model.lower;
+package uk.ashigaru.engine.render.model;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +68,7 @@ public class VAO {
 		return this;
 	}
 	
-	public VAO buffer(int index, int size, float[] data) {		
+	public VAO buffer(int index, int size, float... data) {		
 		this.vbos[index] = GL15.glGenBuffers();
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data).flip();
@@ -77,7 +78,17 @@ public class VAO {
 		return this;
 	}
 	
-	public void rebuffer(int index, int size, float[] data) {
+	public VAO buffer(int index, int size, int... data) {
+		this.vbos[index] = GL15.glGenBuffers();
+		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+		buffer.put(data).flip();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbos[index]);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
+		GL20.glVertexAttribPointer(index, size, GL11.GL_INT, false, 0, 0);
+		return this;
+	}
+	
+	public void rebuffer(int index, int size, float... data) {
 		if(vbos[index] == 0) {
 			buffer(index, size, data);
 			return;

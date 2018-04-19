@@ -2,7 +2,7 @@ package uk.ashigaru.engine.util;
 
 public enum SystemLocation {
 
-	RESOURCE(System.getProperty("user.dir") + "/src/main/resources/"),
+	RESOURCE(System.getProperty("user.dir") + "/src/main/res/"),
 	LOGS(System.getProperty("user.dir") + "/logs/");
 	
 	private String path;

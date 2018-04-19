@@ -1,11 +1,11 @@
-package uk.ashigaru.engine.render.model.higher;
+package uk.ashigaru.engine.render.model.obj;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.joml.Vector3f;
 
-import uk.ashigaru.engine.render.model.lower.Texture;
+import uk.ashigaru.engine.render.model.Texture;
 import uk.ashigaru.engine.util.Resource;
 
 public class Material {

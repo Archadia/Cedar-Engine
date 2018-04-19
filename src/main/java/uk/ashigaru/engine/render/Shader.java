@@ -7,6 +7,7 @@ import java.util.Map;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
@@ -42,7 +43,7 @@ public class Shader {
 		GL20.glCompileShader(shader);
 
 		if (GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
-			throw new RuntimeException("Error creating vertex shader\n" + GL20.glGetShaderInfoLog(shader, GL20.glGetShaderi(shader, GL20.GL_INFO_LOG_LENGTH)));
+			throw new RuntimeException("Error creating " + (type == GL20.GL_VERTEX_SHADER ? "vertex" : "fragment") + " shader\n" + GL20.glGetShaderInfoLog(shader, GL20.glGetShaderi(shader, GL20.GL_INFO_LOG_LENGTH)));
 
 		GL20.glAttachShader(programID, shader);
 	}
@@ -77,6 +78,9 @@ public class Shader {
 			GL20.glUniform1i(location, (int) object);
 		} else if (object instanceof Float) {
 			GL20.glUniform1f(location, (float) object);
+		} else if (object instanceof Vector4f) {
+			Vector4f vec = (Vector4f) object;
+			GL20.glUniform4f(location, vec.x, vec.y, vec.z, vec.w);
 		} else if (object instanceof Vector3f) {
 			Vector3f vec = (Vector3f) object;
 			GL20.glUniform3f(location, vec.x, vec.y, vec.z);

@@ -1,5 +1,7 @@
 package uk.ashigaru.engine;
 
+import org.lwjgl.opengl.GL11;
+
 import uk.ashigaru.engine.glfw.Display;
 import uk.ashigaru.engine.glfw.Input;
 import uk.ashigaru.engine.observer.EventSubject;
@@ -18,6 +20,10 @@ public class Engine {
 	
 	public static EventSubject eventDisplayResize = new EventSubject();
 
+	public static void clearGL() {
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+	}
+	
 	public static void start(Frame frame, int width, int height, String title, boolean vsync, boolean fullscreen) {
 		display = new Display();
 		frame.setupWindow(display);
@@ -50,6 +56,14 @@ public class Engine {
 	
 	public static int getHeight() {
 		return display.getHeight();
+	}
+	
+	public static int gwp(float percent) {
+		return (int) (getWidth() * percent);
+	}
+	
+	public static int ghp(float percent) {
+		return (int) (getHeight() * percent);
 	}
 	
 	public static float getAR() {
