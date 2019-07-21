@@ -2,54 +2,75 @@ package uk.ashigaru.engine;
 
 import org.lwjgl.opengl.GL11;
 
-import uk.ashigaru.engine.glfw.Display;
-import uk.ashigaru.engine.glfw.Input;
-import uk.ashigaru.engine.observer.EventSubject;
+import uk.ashigaru.engine.event.EventSubject;
+import uk.ashigaru.engine.window.Display;
+import uk.ashigaru.engine.window.Input;
 
 public class Engine {
 
-	public static Display display;
-	
-	private static final int TICKS_PER_SECOND = 25;
-	private static final int SKIP_TICKS = 1000 / TICKS_PER_SECOND;
-	private static final int MAX_FRAME_SKIP = 5;
-	
-	private static long nextGameTick = System.nanoTime();
-	private static long loops;
-	private static float interpolation;
-	
+	private static Display display;
+	private static Frame frame;
 	public static EventSubject eventDisplayResize = new EventSubject();
 
-	public static void clearGL() {
+	public static void clearGLBuffer() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 	
-	public static void start(Frame frame, int width, int height, String title, boolean vsync, boolean fullscreen) {
-		display = new Display();
-		frame.setupWindow(display);
-		display.create(width, height, title, vsync, fullscreen);
-		frame.init();		
-		while(display.isDisplayActive()) {
-			loops = 0;
-			while(System.nanoTime() > nextGameTick && loops < MAX_FRAME_SKIP) {
-				frame.update();
-				Input.poll();
-				nextGameTick += SKIP_TICKS;
-				loops = loops + 1;
-			}
+	public static Frame getFrame() {
+		return frame;
+	}
+	
+	public static Display getDisplay() {
+		return display;
+	}
+	
+	public static void start(Class<? extends Frame> frameClass, int width, int height, String title, boolean vsync, boolean fullscreen) {
+		try {
+			Engine.frame = frameClass.newInstance();
+			display = new Display();
+			frame.setupWindow(display);
+			display.create(width, height, title, vsync, fullscreen);
+			frame.init();		
 			
-			interpolation = ((float)(System.nanoTime() + SKIP_TICKS - nextGameTick)) / ((float)(SKIP_TICKS));
-			frame.draw(interpolation);
-			display.update();
+			double t = 0.0;
+			final double dt = 0.01;
+			
+			double currentTime = System.nanoTime() / 1000000000.0;
+			double accumulator = 0.0;
+				
+			while(display.isDisplayActive()) {
+				double newTime = System.nanoTime() / 1000000000.0;
+				double frameTime = newTime - currentTime;
+				currentTime = newTime;
+				
+				accumulator += frameTime;
+				
+				while(accumulator >= dt) {
+					frame.earlyUpdate(t, dt);
+					frame.getStateMachine().update(t, dt);
+					Input.poll(dt);
+					accumulator -= dt;
+					t += 1;
+				}
+				frame.earlyDraw();
+				frame.getStateMachine().draw();
+				display.update();
+			}
+			frame.deinit();
+			display.kill();
+			System.exit(0);
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
-		frame.deinit();
-		display.kill();
 	}
 	
-	public static float getInterpolation() {
-		return interpolation;
+	public static boolean isDev() {
+		String e = System.getProperty("eclipse");
+		return e == null ? false : e.equalsIgnoreCase("true");
 	}
-	
+
 	public static int getWidth() {
 		return display.getWidth();
 	}
