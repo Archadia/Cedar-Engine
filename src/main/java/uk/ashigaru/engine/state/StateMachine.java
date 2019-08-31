@@ -3,19 +3,13 @@ package uk.ashigaru.engine.state;
 import java.util.HashMap;
 import java.util.Map;
 
-import uk.ashigaru.engine.Frame;
 import uk.ashigaru.engine.misc.Logger;
 
 public class StateMachine {
 
 	private Map<String, IState> stateMap = new HashMap<String, IState>();
 	private IState state;
-	private Frame frame;
-	
-	public StateMachine(Frame frame) {
-		this.frame = frame;
-	}
-	
+
 	public void register(String name, IState state) {
 		if(state == null) {
 			Logger.err("Cannot register state as provided state is null.");

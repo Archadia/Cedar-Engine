@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.gfx;
+package uk.ashigaru.engine.graphics;
 
 import java.awt.Color;
 import java.nio.FloatBuffer;
@@ -24,8 +24,8 @@ public class Shader {
 	public Shader(Resource vertex, Resource fragment) {
 		programID = GL20.glCreateProgram();
 
-		attachShader(GL20.GL_VERTEX_SHADER, vertex.source());
-		attachShader(GL20.GL_FRAGMENT_SHADER, fragment.source());
+		attachShader(GL20.GL_VERTEX_SHADER, vertex.readString());
+		attachShader(GL20.GL_FRAGMENT_SHADER, fragment.readString());
 		
 		GL20.glLinkProgram(programID);
 		GL20.glValidateProgram(this.programID);

@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.gfx.model.obj.mesh;
+package uk.ashigaru.engine.graphics.model.obj.mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,7 @@ import java.util.Map;
 
 import com.google.common.collect.Lists;
 
-import uk.ashigaru.engine.gfx.model.obj.Material;
+import uk.ashigaru.engine.graphics.model.obj.Material;
 
 public class Mesh {
 

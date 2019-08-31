@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.gfx.model;
+package uk.ashigaru.engine.graphics.model;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;

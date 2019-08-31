@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.gfx;
+package uk.ashigaru.engine.graphics;
 
 import java.nio.ByteBuffer;
 import java.util.HashMap;

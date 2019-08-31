@@ -31,8 +31,11 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.nio.CharBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCharCallback;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -44,7 +47,12 @@ import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 
-import uk.ashigaru.engine.Engine;
+import uk.ashigaru.engine.window.SimpleCallback.SimpleCharCallback;
+import uk.ashigaru.engine.window.SimpleCallback.SimpleKeyCallback;
+import uk.ashigaru.engine.window.SimpleCallback.SimpleMouseButtonCallback;
+import uk.ashigaru.engine.window.SimpleCallback.SimpleMousePosCallback;
+import uk.ashigaru.engine.window.SimpleCallback.SimpleMouseScrollCallback;
+import uk.ashigaru.engine.window.SimpleCallback.SimpleWindowSizeCallback;
 
 public class Display {
 	
@@ -56,6 +64,12 @@ public class Display {
 	private GLFWErrorCallback glfwErrorCallback;
 	private GLFWCharCallback glfwCharCallback;
 
+	private List<SimpleCallback> callbacks = new ArrayList<SimpleCallback>();
+	
+	public void addCallback(SimpleCallback callback) {
+		callbacks.add(callback);
+	}
+	
 	public long windowID;
 
 	public boolean isDisplayActive() {
@@ -69,19 +83,20 @@ public class Display {
 			throw new IllegalStateException("Unable to initialise GLFW");
 		}
 		glfwDefaultWindowHints();
+		
 		glfwWindowHint(GLFW_SAMPLES, 4);
 	}
 	
 	public void kill() {
-		glfwWindowSizeCallback.free();
-		glfwMouseButtonCallback.free();
-		glfwMouseScrollCallback.free();
-		glfwMouseMoveCallback.free();
-		glfwDestroyWindow(windowID);
 		glfwKeyCallback.free();
-		glfwTerminate();
+		glfwMouseButtonCallback.free();
+		glfwMouseMoveCallback.free();
+		glfwMouseScrollCallback.free();
+		glfwWindowSizeCallback.free();
 		glfwErrorCallback.free();
 		glfwCharCallback.free();
+		glfwDestroyWindow(windowID);
+		glfwTerminate();
 	}
 
 	public void create(int width, int height, String title, boolean vsync, boolean fullscreen) {
@@ -92,45 +107,60 @@ public class Display {
 		glfwSetKeyCallback(windowID, glfwKeyCallback = new GLFWKeyCallback() {
 			public void invoke(long window, int key, int scancode, int action, int mods) {
 				if(window != windowID) return;
-				Input.eventKeyUsed.execute(key, scancode, action, mods);
+				for(SimpleCallback callback : callbacks) {
+					if(callback instanceof SimpleKeyCallback) ((SimpleKeyCallback) callback).execute(key, action);
+				}
 			}			
 		});
 		glfwSetWindowSizeCallback(windowID, glfwWindowSizeCallback = new GLFWWindowSizeCallback() {
 			public void invoke(long window, int width, int height) {
 				if(window != windowID) return;
-				GL11.glViewport(0, 0, width, height);
-				Engine.eventDisplayResize.execute(width, height);
+				for(SimpleCallback callback : callbacks) {
+					if(callback instanceof SimpleWindowSizeCallback) ((SimpleWindowSizeCallback) callback).execute(width, height);
+				}
 			}
 		});
 		glfwSetMouseButtonCallback(windowID, glfwMouseButtonCallback = new GLFWMouseButtonCallback() {
 			public void invoke(long window, int button, int action, int mods) {
 				if(window != windowID) return;
-				Input.eventMouseClick.execute(button, action, mods);
+				for(SimpleCallback callback : callbacks) {
+					if(callback instanceof SimpleMouseButtonCallback) ((SimpleMouseButtonCallback) callback).execute(button, action);
+				}
 			}
 		});
 		glfwSetScrollCallback(windowID, glfwMouseScrollCallback = new GLFWScrollCallback() {
 			public void invoke(long window, double xoffset, double yoffset) {
 				if(window != windowID) return;
-				Input.eventMouseScroll.execute(xoffset, yoffset);
+				for(SimpleCallback callback : callbacks) {
+					if(callback instanceof SimpleMouseScrollCallback) ((SimpleMouseScrollCallback) callback).execute(xoffset, yoffset);
+				}
 			}
 		});
 		glfwSetCursorPosCallback(windowID, glfwMouseMoveCallback = new GLFWCursorPosCallback() {
 			public void invoke(long window, double xpos, double ypos) {
 				if(window != windowID) return;
-				Input.eventMouseMove.execute(xpos, ypos);
+				for(SimpleCallback callback : callbacks) {
+					if(callback instanceof SimpleMousePosCallback) ((SimpleMousePosCallback) callback).execute(xpos, ypos);
+				}
 			}
 		});
 		glfwSetCharCallback(windowID, glfwCharCallback = new GLFWCharCallback() {
 			public void invoke(long window, int codepoint) {
 				if(window != windowID) return;
-				Input.eventCharUsed.execute(codepoint);
+				for(SimpleCallback callback : callbacks) {
+					if(callback instanceof SimpleCharCallback) ((SimpleCharCallback) callback).execute(codepoint);
+				}
 			}
 		});
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowMonitor(windowID, fullscreen ? glfwGetPrimaryMonitor() : NULL, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2, width, height, vidmode.refreshRate());
 		
 		glfwMakeContextCurrent(windowID);
-		if(vsync) glfwSwapInterval(1);
+		if(vsync) {
+			glfwSwapInterval(1);
+		} else {
+			glfwSwapInterval(0);
+		}
 		GL.createCapabilities();
 		
 		GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -152,10 +182,6 @@ public class Display {
 	
 	public float getAspectRatio() {
 		return (float) getWidth()/ (float) getHeight();
-	}
-
-	public void setResizeable(boolean bool) {
-		glfwWindowHint(GLFW_RESIZABLE, bool ? GLFW_TRUE : GLFW_FALSE);
 	}
 	
 	public void setTitle(String title) {

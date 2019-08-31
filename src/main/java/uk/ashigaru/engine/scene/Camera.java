@@ -21,12 +21,4 @@ public class Camera {
 		in.translate(new Vector3f(position).negate());
 		return in;
 	}
-	
-	public void track(Spatial3f spatial, boolean firstPerson) {
-		this.position.x = spatial.getPosition().x;
-		this.position.y = spatial.getPosition().y;
-		this.position.z = spatial.getPosition().z;
-		this.rotation.y = spatial.getOrientation().y;
-		this.rotation.x = spatial.getOrientation().x;
-	}
 }

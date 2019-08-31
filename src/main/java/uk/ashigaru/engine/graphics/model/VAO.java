@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.gfx.model;
+package uk.ashigaru.engine.graphics.model;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -48,8 +48,8 @@ public class VAO {
 		}
 	}
 	
-	public VAO drawArrays(int primitive) {
-		GL11.glDrawArrays(primitive, 0, getVBOLength(0) / 3);
+	public VAO drawArrays(int primitive, int divisor) {
+		GL11.glDrawArrays(primitive, 0, getVBOLength(0) / divisor);
 		return this;
 	}
 	
@@ -64,7 +64,17 @@ public class VAO {
 		return this;
 	}
 	
-	public VAO buffer(int index, int size, float... data) {		
+	public VAO bufferf(int index, int size, FloatBuffer buffer) {		
+		this.vbos[index] = GL15.glGenBuffers();
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbos[index]);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
+		GL20.glEnableVertexAttribArray(index);
+		GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 0, 0);
+		count.put(index, buffer.limit());
+		return this;
+	}
+	
+	public VAO loadf(int index, int size, float... data) {		
 		this.vbos[index] = GL15.glGenBuffers();
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
 		buffer.put(data).flip();
@@ -76,7 +86,7 @@ public class VAO {
 		return this;
 	}
 	
-	public VAO buffer(int index, int size, int... data) {
+	public VAO loadi(int index, int size, int... data) {
 		this.vbos[index] = GL15.glGenBuffers();
 		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
 		buffer.put(data).flip();
@@ -85,20 +95,6 @@ public class VAO {
 		GL20.glVertexAttribPointer(index, size, GL11.GL_INT, false, 0, 0);
 		count.put(index, data.length);
 		return this;
-	}
-	
-	public void rebuffer(int index, int size, float... data) {
-		if(vbos[index] == 0) {
-			buffer(index, size, data);
-			return;
-		}
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
-		buffer.put(data).flip();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbos[index]);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
-		//GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 0, 0);
-		//GL20.glEnableVertexAttribArray(index);
-		count.put(index, data.length);
 	}
 	
 	public void dispose() {

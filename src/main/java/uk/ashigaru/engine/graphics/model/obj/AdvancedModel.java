@@ -1,4 +1,4 @@
- package uk.ashigaru.engine.gfx.model.obj;
+ package uk.ashigaru.engine.graphics.model.obj;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,9 +8,9 @@ import java.util.Map;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import uk.ashigaru.engine.gfx.model.RawModel;
-import uk.ashigaru.engine.gfx.model.VAO;
-import uk.ashigaru.engine.gfx.model.obj.mesh.Mesh;
+import uk.ashigaru.engine.graphics.model.RawModel;
+import uk.ashigaru.engine.graphics.model.VAO;
+import uk.ashigaru.engine.graphics.model.obj.mesh.Mesh;
 import uk.ashigaru.engine.misc.Resource;
 
 public class AdvancedModel {
@@ -35,7 +35,7 @@ public class AdvancedModel {
 	}
 	
 	public static AdvancedModel load(Resource model, Resource materials) {
-		String modelSrc = model.source();
+		String modelSrc = model.readString();
 		String[] lines = modelSrc.split("\n");
 		List<Mesh> modelPartList = new ArrayList<Mesh>();
 		List<Vector3f> vertices = new ArrayList<Vector3f>();
@@ -130,9 +130,9 @@ public class AdvancedModel {
 	
 	public RawModel convert() {
 		return convert((mesh, vao) -> {
-			vao.buffer(0, 3, mesh.getArray(MESH_TYPE_VERTICES));
-			vao.buffer(1, 3, mesh.getArray(MESH_TYPE_NORMALS));
-			vao.buffer(2, 2, mesh.getArray(MESH_TYPE_TEXTURE_COORDINATES));
+			vao.loadf(0, 3, mesh.getArray(MESH_TYPE_VERTICES));
+			vao.loadf(1, 3, mesh.getArray(MESH_TYPE_NORMALS));
+			vao.loadf(2, 2, mesh.getArray(MESH_TYPE_TEXTURE_COORDINATES));
 		});
 	}
 	

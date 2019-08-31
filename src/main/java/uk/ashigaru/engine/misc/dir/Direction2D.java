@@ -3,9 +3,9 @@ package uk.ashigaru.engine.misc.dir;
 public enum Direction2D {
 
 	NORTH(0,-1),
-	EAST(-1, 0),
+	EAST(1, 0),
 	SOUTH(0,1),
-	WEST(1,0);
+	WEST(-1,0);
 	
 	public int xOffset, yOffset;
 	

@@ -1,9 +1,9 @@
-package uk.ashigaru.engine.gfx.model;
+package uk.ashigaru.engine.graphics.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ashigaru.engine.gfx.model.obj.Material;
+import uk.ashigaru.engine.graphics.model.obj.Material;
 
 public class RawModel {
 

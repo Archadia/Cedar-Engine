@@ -1,11 +1,12 @@
-package uk.ashigaru.engine.gfx.model.obj;
+package uk.ashigaru.engine.graphics.model.obj;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
-import uk.ashigaru.engine.gfx.model.Texture;
+import uk.ashigaru.engine.graphics.model.Texture;
 import uk.ashigaru.engine.misc.Resource;
 
 public class Material {
@@ -29,7 +30,7 @@ public class Material {
 	}
 	
 	public static Map<String, Material> load(Resource src) {
-		String material = src.source();
+		String material = src.readString();
 		String[] lines = material.split("\n");
 
 		Map<String, Material> list = new HashMap<String, Material>();
@@ -69,7 +70,7 @@ public class Material {
 				transparency = Float.parseFloat(split[1]);
 			}
 			if(line.startsWith("map_Kd ")) {
-				diffuseMap = new Texture(Resource.find(line.split(" ", 2)[1]));
+				diffuseMap = new Texture(new Resource(line.split(" ", 2)[1]), GL11.GL_NEAREST, GL11.GL_NEAREST);
 			}
 			if (i == lines.length - 1) {
 				list.put(name, new Material(name, ambient, diffuse, specular, transparency, shininess, diffuseMap));

@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public abstract class Batcher<Batchee, Handler> {
+public abstract class Batcher<Batchee> {
 
 	private Map<Integer, List<Batchee>> batch = new HashMap<Integer, List<Batchee>>();
 	
@@ -30,7 +30,5 @@ public abstract class Batcher<Batchee, Handler> {
 	
 	public boolean contains(int i) {
 		return batch.containsKey(i);
-	}
-	
-	public abstract void render(Handler handler);
+	}	
 }

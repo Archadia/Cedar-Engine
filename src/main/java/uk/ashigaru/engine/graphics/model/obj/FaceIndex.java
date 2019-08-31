@@ -1,4 +1,4 @@
-package uk.ashigaru.engine.gfx.model.obj;
+package uk.ashigaru.engine.graphics.model.obj;
 
 import org.joml.Vector3f;
 
