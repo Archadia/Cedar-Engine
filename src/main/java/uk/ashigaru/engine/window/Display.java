@@ -153,7 +153,7 @@ public class Display {
 			}
 		});
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowMonitor(windowID, fullscreen ? glfwGetPrimaryMonitor() : NULL, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2, width, height, vidmode.refreshRate());
+		glfwSetWindowMonitor(windowID, fullscreen ? glfwGetPrimaryMonitor() : NULL, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2, width, height, vsync ? vidmode.refreshRate() : GLFW.GLFW_DONT_CARE);
 		
 		glfwMakeContextCurrent(windowID);
 		if(vsync) {

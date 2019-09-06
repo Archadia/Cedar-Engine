@@ -24,8 +24,8 @@ public class Shader {
 	public Shader(Resource vertex, Resource fragment) {
 		programID = GL20.glCreateProgram();
 
-		attachShader(GL20.GL_VERTEX_SHADER, vertex.readString());
-		attachShader(GL20.GL_FRAGMENT_SHADER, fragment.readString());
+		attachShader(GL20.GL_VERTEX_SHADER, vertex.getPath().getFile(), vertex.readString());
+		attachShader(GL20.GL_FRAGMENT_SHADER, fragment.getPath().getFile(), fragment.readString());
 		
 		GL20.glLinkProgram(programID);
 		GL20.glValidateProgram(this.programID);
@@ -36,7 +36,7 @@ public class Shader {
 
 	}
 
-	public void attachShader(int type, String source) {
+	public void attachShader(int type, String fileName, String source) {
 		int shader = GL20.glCreateShader(type);
 		shaders.put(type, shader);
 
@@ -44,7 +44,7 @@ public class Shader {
 		GL20.glCompileShader(shader);
 
 		if (GL20.glGetShaderi(shader, GL20.GL_COMPILE_STATUS) == GL11.GL_FALSE)
-			throw new RuntimeException("Error creating " + (type == GL20.GL_VERTEX_SHADER ? "vertex" : "fragment") + " shader\n" + GL20.glGetShaderInfoLog(shader, GL20.glGetShaderi(shader, GL20.GL_INFO_LOG_LENGTH)));
+			throw new RuntimeException("[" + fileName + "] Error creating " + (type == GL20.GL_VERTEX_SHADER ? "vertex" : "fragment") + " shader\n" + GL20.glGetShaderInfoLog(shader, GL20.glGetShaderi(shader, GL20.GL_INFO_LOG_LENGTH)));
 
 		GL20.glAttachShader(programID, shader);
 	}
@@ -97,7 +97,7 @@ public class Shader {
 			GL20.glUniformMatrix4fv(location, false, buffer);
 		} else if (object instanceof Color) {
 			Color vec = (Color) object;
-			GL20.glUniform3f(location, vec.getRed() / 255f, vec.getGreen() / 255f, vec.getBlue() / 255f);
+			GL20.glUniform4f(location, vec.getRed() / 255f, vec.getGreen() / 255f, vec.getBlue() / 255f, vec.getAlpha() / 255f);
 		}
 		return this;
 	}
