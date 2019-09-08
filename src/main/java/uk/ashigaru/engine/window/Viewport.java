@@ -6,11 +6,9 @@ import uk.ashigaru.engine.Engine;
 
 public class Viewport {
 
-	private Engine engine;
 	public int x, y, w, h;
 	
-	public Viewport(Engine engine, int x, int y, int w, int h) {
-		this.engine = engine;
+	public Viewport(int x, int y, int w, int h) {
 		this.x = x;
 		this.y = y;
 		this.w = w;
@@ -26,6 +24,6 @@ public class Viewport {
 	}
 	
 	public float getScaleRatio() {
-		return (float)w/(float)engine.getWidth();
+		return (float)w/(float)Engine.getWidth();
 	}
 }

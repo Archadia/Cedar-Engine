@@ -8,48 +8,48 @@ import uk.ashigaru.engine.window.Viewport;
 
 public class Engine {
 
-	private Display display;
-	private GameLoopRequester glRequester;
+	private static Display display;
+	private static GameLoopRequester glRequester;
 	
-	private Object child;
+	private static Object child;
 	
-	public void setChild(Object child) {
-		this.child = child;
+	public static void setChild(Object c) {
+		child = c;
 	}
 	
-	public Object getChild() {
-		return this.child;
+	public static Object getChild() {
+		return child;
 	}
 
 	public static void clearGLBuffer() {
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 	}
 
-	public Display getDisplay() {
+	public static Display getDisplay() {
 		return display;
 	}
 	
-	public long getDisplayID() {
+	public static long getDisplayID() {
 		return display.getWindowID();
 	}
 	
-	public GameLoopRequester getGameLoopRequester() {
+	public static GameLoopRequester getGameLoopRequester() {
 		return glRequester;
 	}
-	
-	public Engine() {
-		this.display = new Display();
-		this.glRequester = new GameLoopRequester();
+
+	public static void initialiseGLFW() {
+		display = new Display();
+		glRequester = new GameLoopRequester();
 	}
 	
-	public void createWindow(int width, int height, String title, boolean vsync, boolean fullscreen) {
+	public static void createWindow(int width, int height, String title, boolean vsync, boolean fullscreen) {
 		display.create(width, height, title, vsync, fullscreen);
 	}
 	
-	private double fps;
-	private double ups;
+	private static double fps;
+	private static double ups;
 	
-	public void createGameLoop() {
+	public static void createGameLoop() {
 		double t = 0.0;
 		final double dt = 0.01;
 			
@@ -98,11 +98,11 @@ public class Engine {
 		System.exit(0);
 	}
 	
-	public double getFPS() {
+	public static double getFPS() {
 		return fps;
 	}
 	
-	public double getUPS() {
+	public static double getUPS() {
 		return ups;
 	}
 	
@@ -111,15 +111,15 @@ public class Engine {
 		return e == null ? false : e.equalsIgnoreCase("true");
 	}
 
-	public int getWidth() {
+	public static int getWidth() {
 		return display.getWidth();
 	}
 	
-	public int getHeight() {
+	public static int getHeight() {
 		return display.getHeight();
 	}
 	
-	public float getAR() {
+	public static float getAR() {
 		return (float) display.getWidth() / (float) display.getHeight();
 	}
 }

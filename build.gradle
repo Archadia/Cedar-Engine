@@ -14,7 +14,7 @@ switch ( OperatingSystem.current() ) {
 		project.ext.lwjglNatives = "natives-macos"
 		break
 }
-
+ 
 project.ext.lwjglVersion = "3.2.2"
 project.ext.jomlVersion = "1.9.14"
 project.ext.guavaVersion = "27.1-jre"
