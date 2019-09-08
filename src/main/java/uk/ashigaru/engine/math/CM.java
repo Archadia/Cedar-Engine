@@ -2,8 +2,6 @@ package uk.ashigaru.engine.math;
 
 import java.util.Random;
 
-import org.joml.Vector2f;
-
 public class CM {
 
 	public static String humanReadableByteCount(long bytes, boolean si) {

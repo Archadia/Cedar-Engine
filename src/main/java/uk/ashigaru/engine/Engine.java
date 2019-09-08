@@ -4,7 +4,6 @@ import org.lwjgl.opengl.GL11;
 
 import uk.ashigaru.engine.loop.GameLoopRequester;
 import uk.ashigaru.engine.window.Display;
-import uk.ashigaru.engine.window.Viewport;
 
 public class Engine {
 

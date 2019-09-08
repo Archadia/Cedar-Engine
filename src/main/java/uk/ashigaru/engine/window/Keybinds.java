@@ -3,8 +3,6 @@ package uk.ashigaru.engine.window;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lwjgl.glfw.GLFW;
-
 public class Keybinds {
 
 	private static Map<String, Integer> keybinds = new HashMap<String, Integer>();

@@ -3,8 +3,6 @@ package uk.ashigaru.engine.components;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.ashigaru.engine.Engine;
-import uk.ashigaru.engine.loop.IGameLoop;
 import uk.ashigaru.engine.scene.Camera;
 import uk.ashigaru.engine.scene.GameObject;
 

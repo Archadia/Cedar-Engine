@@ -3,7 +3,6 @@ package uk.ashigaru.engine.graphics.model;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.nio.IntBuffer;
-import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
