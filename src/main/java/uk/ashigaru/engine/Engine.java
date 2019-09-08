@@ -47,6 +47,7 @@ public class Engine {
 	}
 	
 	private double fps;
+	private double ups;
 	
 	public void createGameLoop() {
 		double t = 0.0;
@@ -56,8 +57,11 @@ public class Engine {
 		double accumulator = 0.0;
 		
 		double ct = System.nanoTime() / 1000000000.0;
+		double ctups = System.nanoTime() / 1000000000.0;
 		
 		int count = 0;
+		int countUPS = 0;
+		
 		while(display.isDisplayActive()) {
 			double newTime = System.nanoTime() / 1000000000.0;
 			double frameTime = newTime - currentTime;
@@ -69,6 +73,13 @@ public class Engine {
 				glRequester.update(t, dt);
 				//input poll
 				accumulator -= dt;
+				countUPS += 1;
+				double ntups = System.nanoTime() / 1000000000.0;
+				if(ntups - ctups >= 1.0) {
+					ups = countUPS;
+					countUPS = 0;
+					ctups = ntups;
+				}
 				t += 1;
 			}
 			glRequester.draw();
@@ -89,6 +100,10 @@ public class Engine {
 	
 	public double getFPS() {
 		return fps;
+	}
+	
+	public double getUPS() {
+		return ups;
 	}
 	
 	public static boolean isDev() {
