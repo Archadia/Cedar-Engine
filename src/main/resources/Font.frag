@@ -16,5 +16,4 @@ void main()
 	float alpha = 1.0 - smoothstep(width, width + edge, distance);
 
 	fragColor = vec4(color.rgb, alpha);
-
 }

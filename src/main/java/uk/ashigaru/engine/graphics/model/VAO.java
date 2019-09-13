@@ -5,12 +5,12 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.opengl.GL31;
+import org.lwjgl.system.MemoryUtil;
 
 public class VAO {
 
@@ -76,24 +76,26 @@ public class VAO {
 	
 	public VAO loadf(int index, int size, float... data) {		
 		this.vbos[index] = GL15.glGenBuffers();
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(data.length);
+		FloatBuffer buffer = MemoryUtil.memAllocFloat(data.length);
 		buffer.put(data).flip();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbos[index]);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
 		GL20.glEnableVertexAttribArray(index);
 		GL20.glVertexAttribPointer(index, size, GL11.GL_FLOAT, false, 0, 0);
 		count.put(index, data.length);
+		MemoryUtil.memFree(buffer);
 		return this;
 	}
 	
 	public VAO loadi(int index, int size, int... data) {
 		this.vbos[index] = GL15.glGenBuffers();
-		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+		IntBuffer buffer = MemoryUtil.memAllocInt(data.length);
 		buffer.put(data).flip();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, vbos[index]);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, buffer, GL15.GL_STATIC_DRAW);
 		GL20.glVertexAttribPointer(index, size, GL11.GL_INT, false, 0, 0);
 		count.put(index, data.length);
+		MemoryUtil.memFree(buffer);
 		return this;
 	}
 	
@@ -102,5 +104,6 @@ public class VAO {
 			GL15.glDeleteBuffers(id);
 		}
 		GL30.glDeleteVertexArrays(vao);
+		count.clear();
 	}
 }

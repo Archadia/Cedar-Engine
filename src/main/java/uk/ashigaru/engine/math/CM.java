@@ -28,4 +28,16 @@ public class CM {
 	public static float r2d(float r) {
 		return (float) Math.toDegrees(r);
 	}
+
+	public static float inv(float f) {
+		return 1f/f;
+	}
+	
+	public static float sind(float d) {
+		return (float) Math.sin(d2r(d));
+	}
+	
+	public static float cosd(float d) {
+		return (float) Math.cos(d2r(d));
+	}
 }

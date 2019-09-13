@@ -4,7 +4,7 @@ import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
+import org.lwjgl.system.MemoryUtil;
 
 import uk.ashigaru.engine.graphics.model.Texture;
 import uk.ashigaru.engine.graphics.model.VAO;
@@ -57,8 +57,8 @@ public class FontModel {
 			}
 		}
 		stringWidth = cursorX;
-		FloatBuffer vertexBuffer = BufferUtils.createFloatBuffer(vertices.size());
-		FloatBuffer texBuffer = BufferUtils.createFloatBuffer(texes.size());
+		FloatBuffer vertexBuffer = MemoryUtil.memAllocFloat(vertices.size());
+		FloatBuffer texBuffer = MemoryUtil.memAllocFloat(texes.size());
 		
 		vertices.forEach(f -> {
 			vertexBuffer.put(f);
@@ -70,6 +70,8 @@ public class FontModel {
 		texBuffer.flip();
 	
 		model(vertexBuffer, texBuffer);
+		MemoryUtil.memFree(vertexBuffer);
+		MemoryUtil.memFree(texBuffer);
 	}
 	
 	public float getStringWidth() {
@@ -138,5 +140,7 @@ public class FontModel {
 	
 	public void dispose() {
 		vao.dispose();
+		vertices.clear();
+		texes.clear();
 	}
 }

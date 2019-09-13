@@ -2,14 +2,15 @@ package uk.ashigaru.engine.graphics.model;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.IntBuffer;
 
 import javax.imageio.ImageIO;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL15;
+import org.lwjgl.system.MemoryUtil;
 
 import uk.ashigaru.engine.misc.Resource;
 
@@ -37,7 +38,8 @@ public class Texture {
 	private int[] read(Resource texture) {
 		int[] pixels = null;
 		try {
-			BufferedImage image = ImageIO.read(texture.getPath().openStream());
+			InputStream is = texture.getPath().openStream();
+			BufferedImage image = ImageIO.read(is);
 			width = image.getWidth();
 			height = image.getHeight();
 			pixels = new int[width * height];
@@ -46,6 +48,7 @@ public class Texture {
 					pixels[x + width * y] = image.getRGB(x, y);
 				}
 			}
+			is.close();
 		} catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -65,7 +68,7 @@ public class Texture {
 	private int createTexture(int[] data, int width, int height, int min, int mag) {
 		int result = GL11.glGenTextures(); 
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, result);	
-		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+		IntBuffer buffer = MemoryUtil.memAllocInt(data.length);
 		buffer.put(data).flip();
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, min);
@@ -73,6 +76,7 @@ public class Texture {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		MemoryUtil.memFree(buffer);
 		return result;
 	}
 	

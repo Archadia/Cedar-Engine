@@ -28,6 +28,7 @@ public class Resource {
 			while((line = reader.readLine()) != null) {
 				result.append(line + "\n");
 			}
+			reader.close();
 		} catch (IOException exception) {
 			exception.printStackTrace();
 		}

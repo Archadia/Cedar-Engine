@@ -2,8 +2,8 @@ package uk.ashigaru.engine.graphics.model;
 
 import java.nio.IntBuffer;
 
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryUtil;
 
 import uk.ashigaru.engine.misc.Logger;
 
@@ -22,7 +22,7 @@ public class ArtificialTexture {
 		int result = GL11.glGenTextures();
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, result);	
-		IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+		IntBuffer buffer = MemoryUtil.memAllocInt(data.length);
 		buffer.put(data).flip();
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);		
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
@@ -30,6 +30,7 @@ public class ArtificialTexture {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		MemoryUtil.memFree(buffer);
 		this.textureID = result;
 	}
 	
@@ -40,9 +41,10 @@ public class ArtificialTexture {
 		}
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);	
-		IntBuffer buffer = BufferUtils.createIntBuffer(texture.getPixels().length);
+		IntBuffer buffer = MemoryUtil.memAllocInt(texture.getPixels().length);
 		buffer.put(texture.getPixels()).flip();
 		GL11.glTexSubImage2D(GL11.GL_TEXTURE_2D, 0, x, y, texture.getWidth(), texture.getHeight(), GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+		MemoryUtil.memFree(buffer);
 	}
 }

@@ -43,6 +43,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.system.MemoryUtil;
 
 import uk.ashigaru.engine.window.SimpleCallback.SimpleCharCallback;
 import uk.ashigaru.engine.window.SimpleCallback.SimpleKeyCallback;
@@ -166,15 +167,19 @@ public class Display {
 	}
 	
 	public int getWidth() {
-		IntBuffer width = BufferUtils.createIntBuffer(1);
+		IntBuffer width = MemoryUtil.memAllocInt(1);
 		glfwGetWindowSize(windowID, width, null);
-		return width.get();
+		int w = width.get();
+		MemoryUtil.memFree(width);
+		return w;
 	}
 	
 	public int getHeight() {
-		IntBuffer height = BufferUtils.createIntBuffer(1);
+		IntBuffer height = MemoryUtil.memAllocInt(1);
 		glfwGetWindowSize(windowID, null, height);
-		return height.get();
+		int h = height.get();
+		MemoryUtil.memFree(height);
+		return h;
 	}
 	
 	public float getAspectRatio() {
@@ -190,6 +195,11 @@ public class Display {
 		glfwSwapBuffers(windowID);
 		glfwPollEvents();
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		try {
+			Thread.sleep(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public long getWindowID() {

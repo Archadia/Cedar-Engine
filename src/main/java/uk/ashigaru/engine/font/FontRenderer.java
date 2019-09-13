@@ -7,6 +7,7 @@ import org.joml.Vector2f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
+import uk.ashigaru.engine.RenderLayer;
 import uk.ashigaru.engine.graphics.Shader;
 import uk.ashigaru.engine.graphics.model.VAO;
 import uk.ashigaru.engine.misc.Resource;
@@ -36,14 +37,15 @@ public class FontRenderer {
 		shader.load("width", width);
 		shader.load("edge", edge);
 		if(model.isCentered()) {
-			shader.load("transformation", new Matrix4f().translate(translation.x - ((model.getStringWidth() * scale.x)/2f), translation.y, 0).scale(scale.x, scale.y, 1));
+			shader.load("transformation", new Matrix4f().translate(translation.x - ((model.getStringWidth() * scale.x)/2f), translation.y, RenderLayer.GUI_TEXT.z).scale(scale.x, scale.y, 1));
 		} else {
-			shader.load("transformation", new Matrix4f().translate(translation.x, translation.y, 0f).scale(scale.x, scale.y, 1));
+			shader.load("transformation", new Matrix4f().translate(translation.x, translation.y, RenderLayer.GUI_TEXT.z).scale(scale.x, scale.y, 1));
 		}
 		vao.drawArrays(GL11.GL_TRIANGLES, 2);
 		GL15.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		vao.unbind();
 		shader.unbind();
+		model.dispose();
 	}
 	
 	public void drawString(String text, CustomFont font, float size, float width, float edge, boolean centered, Vector2f translation, Color color) {
@@ -53,6 +55,12 @@ public class FontRenderer {
 	
 	public static float stringWidth(String tex, CustomFont font, float size) {
 		FontModel model = new FontModel(font, tex, size, false);
-		return model.getStringWidth() * 0.2f;
+		float width = model.getStringWidth();
+		model.dispose();
+		return width * 0.2f;
+	}
+	
+	public void exit() {
+		this.shader.dispose();
 	}
 }

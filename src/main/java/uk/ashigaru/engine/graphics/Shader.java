@@ -9,9 +9,9 @@ import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryUtil;
 
 import uk.ashigaru.engine.misc.Resource;
 
@@ -91,10 +91,11 @@ public class Shader {
 		} else if (object instanceof Boolean) {
 			GL20.glUniform1f(location, (boolean) object ? 1 : 0);
 		} else if (object instanceof Matrix4f) {
-			FloatBuffer buffer = BufferUtils.createFloatBuffer(16);
+			FloatBuffer buffer = MemoryUtil.memAllocFloat(16);
 			Matrix4f mat = (Matrix4f) object;
 			mat.get(buffer);
 			GL20.glUniformMatrix4fv(location, false, buffer);
+			MemoryUtil.memFree(buffer);
 		} else if (object instanceof Color) {
 			Color vec = (Color) object;
 			GL20.glUniform4f(location, vec.getRed() / 255f, vec.getGreen() / 255f, vec.getBlue() / 255f, vec.getAlpha() / 255f);

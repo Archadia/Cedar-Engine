@@ -1,5 +1,6 @@
 package uk.ashigaru.engine;
 
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 
 import uk.ashigaru.engine.loop.GameLoopRequester;
@@ -70,7 +71,7 @@ public class Engine {
 			
 			while(accumulator >= dt) {
 				glRequester.update(t, dt);
-				//input poll
+
 				accumulator -= dt;
 				countUPS += 1;
 				double ntups = System.nanoTime() / 1000000000.0;
@@ -118,7 +119,35 @@ public class Engine {
 		return display.getHeight();
 	}
 	
+	public static double getMouseX() {
+		double[] xpos = new double[1];
+		double[] ypos = new double[1];
+		GLFW.glfwGetCursorPos(display.windowID, xpos, ypos);
+		return xpos[0];
+	}
+	
+	public static double getMouseY() {
+		double[] xpos = new double[1];
+		double[] ypos = new double[1];
+		GLFW.glfwGetCursorPos(display.windowID, xpos, ypos);
+		return ypos[0];
+	}
+	
 	public static float getAR() {
 		return (float) display.getWidth() / (float) display.getHeight();
+	}
+	
+	public static int getFrameBufferWidth() {
+		int[] width = new int[1];
+		int[] height = new int[1];
+		GLFW.glfwGetFramebufferSize(Engine.getDisplayID(), width, height);
+		return width[0];
+	}
+	
+	public static int getFrameBufferHeight() {
+		int[] width = new int[1];
+		int[] height = new int[1];
+		GLFW.glfwGetFramebufferSize(Engine.getDisplayID(), width, height);
+		return height[0];
 	}
 }
